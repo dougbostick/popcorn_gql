@@ -1,0 +1,370 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "johndoe",
+      "email": "john@example.com",
+      "displayName": "John Doe",
+      "bio": "Software engineer passionate about GraphQL and React. Love building amazing user experiences!",
+      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      "createdAt": "2024-01-15T08:30:00Z",
+      "updatedAt": "2024-07-20T14:22:00Z"
+    },
+    {
+      "id": "2", 
+      "username": "sarahsmith",
+      "email": "sarah@example.com",
+      "displayName": "Sarah Smith",
+      "bio": "UX designer & coffee enthusiast ☕ Creating beautiful interfaces one pixel at a time",
+      "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b1d1?w=400",
+      "createdAt": "2024-02-03T12:15:00Z",
+      "updatedAt": "2024-07-18T09:45:00Z"
+    },
+    {
+      "id": "3",
+      "username": "mikejohnson",
+      "email": "mike@example.com", 
+      "displayName": "Mike Johnson",
+      "bio": "Full-stack developer | TypeScript advocate | Building the future of web apps",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+      "createdAt": "2024-01-28T16:20:00Z",
+      "updatedAt": "2024-07-15T11:30:00Z"
+    },
+    {
+      "id": "4",
+      "username": "emilydavis",
+      "email": "emily@example.com",
+      "displayName": "Emily Davis",
+      "bio": "Product manager turned developer. Love solving complex problems with elegant solutions.",
+      "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
+      "createdAt": "2024-03-10T10:45:00Z",
+      "updatedAt": "2024-07-22T13:15:00Z"
+    },
+    {
+      "id": "5",
+      "username": "alexchen",
+      "email": "alex@example.com",
+      "displayName": "Alex Chen",
+      "bio": "DevOps engineer | Kubernetes enthusiast | Making deployments smooth and scalable",
+      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+      "createdAt": "2024-02-18T14:30:00Z", 
+      "updatedAt": "2024-07-19T16:45:00Z"
+    },
+    {
+      "id": "6",
+      "username": "jessicawang",
+      "email": "jessica@example.com",
+      "displayName": "Jessica Wang",
+      "bio": "Frontend architect | React expert | Passionate about component design and accessibility",
+      "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400",
+      "createdAt": "2024-01-05T09:20:00Z",
+      "updatedAt": "2024-07-21T08:30:00Z"
+    },
+    {
+      "id": "7",
+      "username": "davidbrown",
+      "email": "david@example.com",
+      "displayName": "David Brown",
+      "bio": "Backend specialist | Database optimization guru | Love making APIs lightning fast ⚡",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400",
+      "createdAt": "2024-03-22T11:10:00Z",
+      "updatedAt": "2024-07-17T15:20:00Z"
+    },
+    {
+      "id": "8",
+      "username": "lisagarcia",
+      "email": "lisa@example.com",
+      "displayName": "Lisa Garcia",
+      "bio": "Mobile developer | Flutter & React Native | Building apps that users actually love",
+      "avatar": "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400",
+      "createdAt": "2024-02-28T13:45:00Z",
+      "updatedAt": "2024-07-23T10:15:00Z"
+    },
+    {
+      "id": "9",
+      "username": "ryanwilson",
+      "email": "ryan@example.com",
+      "displayName": "Ryan Wilson",
+      "bio": "Security engineer | Ethical hacker | Protecting applications from the bad guys 🛡️",
+      "avatar": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400",
+      "createdAt": "2024-01-12T07:30:00Z",
+      "updatedAt": "2024-07-16T12:45:00Z"
+    },
+    {
+      "id": "10",
+      "username": "annalee",
+      "email": "anna@example.com",
+      "displayName": "Anna Lee",
+      "bio": "Data scientist | ML engineer | Turning data into insights and insights into products",
+      "avatar": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400",
+      "createdAt": "2024-03-05T15:20:00Z",
+      "updatedAt": "2024-07-24T09:30:00Z"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "title": "Building My First GraphQL API",
+      "content": "Just finished implementing my first GraphQL server with Apollo! The type safety and query flexibility is amazing. Can't believe I waited so long to try it. What are your favorite GraphQL tools?",
+      "imageUrl": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600",
+      "authorId": "1",
+      "createdAt": "2024-07-20T14:30:00Z",
+      "updatedAt": "2024-07-20T14:30:00Z"
+    },
+    {
+      "id": "2",
+      "title": "TypeScript Best Practices",
+      "content": "After working with TS for 3 years, here are my top tips: 1) Use strict mode from day one 2) Leverage union types 3) Don't fight the compiler 4) Use type guards effectively. What would you add?",
+      "imageUrl": null,
+      "authorId": "1",
+      "createdAt": "2024-07-18T09:15:00Z",
+      "updatedAt": "2024-07-18T09:15:00Z"
+    },
+    {
+      "id": "3",
+      "title": "React Server Components Deep Dive",
+      "content": "Spent the weekend exploring RSCs and I'm blown away by the performance improvements. The ability to fetch data at the component level while maintaining SEO is a game changer. Here's what I learned...",
+      "imageUrl": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600",
+      "authorId": "1",
+      "createdAt": "2024-07-15T16:45:00Z",
+      "updatedAt": "2024-07-15T16:45:00Z"
+    },
+    {
+      "id": "4",
+      "title": "Why I Switched from REST to GraphQL",
+      "content": "Made the transition last month and here's why it was worth it: Single endpoint, no over-fetching, strongly typed, amazing tooling. The developer experience is just superior in every way.",
+      "imageUrl": null,
+      "authorId": "1",
+      "createdAt": "2024-07-12T11:20:00Z",
+      "updatedAt": "2024-07-12T11:20:00Z"
+    },
+    {
+      "id": "5",
+      "title": "Node.js Performance Tips",
+      "content": "Optimizing a Node app to handle 10k concurrent users taught me a lot. Key lessons: use clustering, implement proper caching, profile your code, and always use connection pooling for databases.",
+      "imageUrl": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600",
+      "authorId": "1",
+      "createdAt": "2024-07-08T13:30:00Z",
+      "updatedAt": "2024-07-08T13:30:00Z"
+    },
+    {
+      "id": "6",
+      "title": "UX Design Principles That Every Developer Should Know",
+      "content": "As developers, we often focus on the code and forget about the user. Here are 5 UX principles that transformed how I build interfaces: 1) Less is more 2) Consistency is key 3) Feedback is essential...",
+      "imageUrl": "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=600",
+      "authorId": "2",
+      "createdAt": "2024-07-22T10:15:00Z",
+      "updatedAt": "2024-07-22T10:15:00Z"
+    },
+    {
+      "id": "7",
+      "title": "Designing for Accessibility from Day One",
+      "content": "Web accessibility isn't an afterthought - it should be built in from the start. Here's my checklist: semantic HTML, proper ARIA labels, keyboard navigation, color contrast, and screen reader testing. Everyone deserves great UX!",
+      "imageUrl": null,
+      "authorId": "2",
+      "createdAt": "2024-07-19T14:20:00Z",
+      "updatedAt": "2024-07-19T14:20:00Z"
+    },
+    {
+      "id": "8",
+      "title": "The Psychology of Color in UI Design",
+      "content": "Color choices can make or break your user interface. Blue builds trust, green suggests success, red demands attention. But context matters more than the color itself. Here's how I approach color psychology...",
+      "imageUrl": "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600",
+      "authorId": "2",
+      "createdAt": "2024-07-16T12:45:00Z",
+      "updatedAt": "2024-07-16T12:45:00Z"
+    },
+    {
+      "id": "9",
+      "title": "Microservices vs Monolith: When to Choose What",
+      "content": "The age-old debate! After working with both architectures, here's my take: Start with a monolith, split when you have clear domain boundaries, and remember that complexity is the real enemy, not architecture choice.",
+      "imageUrl": "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=600",
+      "authorId": "3",
+      "createdAt": "2024-07-21T08:30:00Z",
+      "updatedAt": "2024-07-21T08:30:00Z"
+    },
+    {
+      "id": "10",
+      "title": "Kubernetes Production Lessons Learned",
+      "content": "Just hit our 1-year anniversary running K8s in production. Here are the hard-won lessons: resource limits save you money, health checks save your sleep, and monitoring saves your sanity. Details below...",
+      "imageUrl": null,
+      "authorId": "5",
+      "createdAt": "2024-07-20T15:45:00Z",
+      "updatedAt": "2024-07-20T15:45:00Z"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "content": "Great post! I had similar experiences when I first tried GraphQL. The learning curve was worth it.",
+      "authorId": "2",
+      "postId": "1",
+      "createdAt": "2024-07-20T15:30:00Z",
+      "updatedAt": "2024-07-20T15:30:00Z"
+    },
+    {
+      "id": "2",
+      "content": "Apollo Client has been a game changer for me. The caching layer alone is worth the switch.",
+      "authorId": "3",
+      "postId": "1",
+      "createdAt": "2024-07-20T16:15:00Z",
+      "updatedAt": "2024-07-20T16:15:00Z"
+    },
+    {
+      "id": "3",
+      "content": "I'd add 'prefer type assertions over any' to your TypeScript tips. Saved me so many runtime errors!",
+      "authorId": "4",
+      "postId": "2",
+      "createdAt": "2024-07-18T10:30:00Z",
+      "updatedAt": "2024-07-18T10:30:00Z"
+    },
+    {
+      "id": "4",
+      "content": "Union types are so powerful once you understand them. Great advice!",
+      "authorId": "5",
+      "postId": "2",
+      "createdAt": "2024-07-18T11:45:00Z",
+      "updatedAt": "2024-07-18T11:45:00Z"
+    },
+    {
+      "id": "5",
+      "content": "RSCs are definitely the future. The mental model shift takes time but it's worth it.",
+      "authorId": "6",
+      "postId": "3",
+      "createdAt": "2024-07-15T18:20:00Z",
+      "updatedAt": "2024-07-15T18:20:00Z"
+    },
+    {
+      "id": "6",
+      "content": "This resonates so much! The over-fetching problem in REST APIs was driving me crazy.",
+      "authorId": "7",
+      "postId": "4",
+      "createdAt": "2024-07-12T12:30:00Z",
+      "updatedAt": "2024-07-12T12:30:00Z"
+    },
+    {
+      "id": "7",
+      "content": "Connection pooling tip is gold! Made such a difference in our app performance.",
+      "authorId": "8",
+      "postId": "5",
+      "createdAt": "2024-07-08T14:45:00Z",
+      "updatedAt": "2024-07-08T14:45:00Z"
+    },
+    {
+      "id": "8",
+      "content": "As a developer, I really needed to hear this. UX should never be an afterthought.",
+      "authorId": "1",
+      "postId": "6",
+      "createdAt": "2024-07-22T11:30:00Z",
+      "updatedAt": "2024-07-22T11:30:00Z"
+    },
+    {
+      "id": "9",
+      "content": "Accessibility testing with actual screen readers was eye-opening for our team.",
+      "authorId": "9",
+      "postId": "7",
+      "createdAt": "2024-07-19T15:45:00Z",
+      "updatedAt": "2024-07-19T15:45:00Z"
+    },
+    {
+      "id": "10",
+      "content": "The monolith vs microservices debate never gets old! Context is everything.",
+      "authorId": "10",
+      "postId": "9",
+      "createdAt": "2024-07-21T09:15:00Z",
+      "updatedAt": "2024-07-21T09:15:00Z"
+    }
+  ],
+  "likes": [
+    {
+      "id": "1",
+      "userId": "2",
+      "postId": "1",
+      "createdAt": "2024-07-20T14:35:00Z"
+    },
+    {
+      "id": "2",
+      "userId": "3",
+      "postId": "1",
+      "createdAt": "2024-07-20T15:20:00Z"
+    },
+    {
+      "id": "3",
+      "userId": "4",
+      "postId": "1",
+      "createdAt": "2024-07-20T16:10:00Z"
+    },
+    {
+      "id": "4",
+      "userId": "5",
+      "postId": "2",
+      "createdAt": "2024-07-18T09:30:00Z"
+    },
+    {
+      "id": "5",
+      "userId": "6",
+      "postId": "2",
+      "createdAt": "2024-07-18T10:15:00Z"
+    },
+    {
+      "id": "6",
+      "userId": "7",
+      "postId": "3",
+      "createdAt": "2024-07-15T17:20:00Z"
+    },
+    {
+      "id": "7",
+      "userId": "8",
+      "postId": "3",
+      "createdAt": "2024-07-15T18:45:00Z"
+    },
+    {
+      "id": "8",
+      "userId": "9",
+      "postId": "4",
+      "createdAt": "2024-07-12T13:15:00Z"
+    },
+    {
+      "id": "9",
+      "userId": "10",
+      "postId": "5",
+      "createdAt": "2024-07-08T14:20:00Z"
+    },
+    {
+      "id": "10",
+      "userId": "1",
+      "postId": "6",
+      "createdAt": "2024-07-22T10:45:00Z"
+    },
+    {
+      "id": "11",
+      "userId": "3",
+      "postId": "6",
+      "createdAt": "2024-07-22T11:15:00Z"
+    },
+    {
+      "id": "12",
+      "userId": "4",
+      "postId": "7",
+      "createdAt": "2024-07-19T14:30:00Z"
+    },
+    {
+      "id": "13",
+      "userId": "5",
+      "postId": "8",
+      "createdAt": "2024-07-16T13:20:00Z"
+    },
+    {
+      "id": "14",
+      "userId": "6",
+      "postId": "9",
+      "createdAt": "2024-07-21T08:45:00Z"
+    },
+    {
+      "id": "15",
+      "userId": "7",
+      "postId": "10",
+      "createdAt": "2024-07-20T16:20:00Z"
+    }
+  ]
+}
