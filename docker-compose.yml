@@ -1,0 +1,39 @@
+services:
+  mongodb:
+    image: mongo:7-jammy
+    container_name: socialmedia-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: socialmedia
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - socialmedia-network
+
+  app:
+    build: .
+    container_name: socialmedia-app
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/socialmedia
+      - PORT=4000
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - socialmedia-network
+    command: npm run dev
+
+volumes:
+  mongodb_data:
+
+networks:
+  socialmedia-network:
+    driver: bridge

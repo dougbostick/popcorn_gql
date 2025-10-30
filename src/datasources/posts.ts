@@ -1,14 +1,14 @@
 import * as data from "../data/data.json";
+import { Post } from "../types/graphql";
 
-export class PotsDataSource {
-    private posts = data;
+export class PostsDataSource {
+    private posts: Post[] = data.posts;
 
-    getAllPosts() {
+    getAllPosts(): Post[] {
       return this.posts;
     }
 
-    getPostById(id: number) {
-      return this.posts.find(post =>
-  post.id === id);
+    getPostById(id: string): Post | undefined {
+      return this.posts.find((post: Post) => post.id === id);
     }
-  }
+}
