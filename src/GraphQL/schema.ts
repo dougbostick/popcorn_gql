@@ -4,11 +4,11 @@ export const typeDefs = gql`
   type Query {
     # User queries
     me: User
-    user(id: ID!): User
+    user(_id: ID!): User
     users: [User!]!
-    
-    # Post queries  
-    post(id: ID!): Post
+
+    # Post queries
+    post(_id: ID!): Post
     posts: [Post!]!
     userPosts(userId: ID!): [Post!]!
     
@@ -23,18 +23,18 @@ export const typeDefs = gql`
     
     # Post mutations
     createPost(input: CreatePostInput!): Post!
-    updatePost(id: ID!, input: UpdatePostInput!): Post!
-    deletePost(id: ID!): Boolean!
+    updatePost(_id: ID!, input: UpdatePostInput!): Post!
+    deletePost(_id: ID!): Boolean!
     
     # Interaction mutations
     likePost(postId: ID!): Like!
     unlikePost(postId: ID!): Boolean!
     addComment(input: CreateCommentInput!): Comment!
-    deleteComment(id: ID!): Boolean!
+    deleteComment(_id: ID!): Boolean!
   }
 
   type User {
-    id: ID!
+    _id: ID!
     username: String!
     email: String!
     displayName: String!
@@ -55,10 +55,11 @@ export const typeDefs = gql`
   }
 
   type Post {
-    id: ID!
+    _id: ID!
     title: String!
     content: String!
     imageUrl: String
+    authorId: ID!
     createdAt: String!
     updatedAt: String!
     
@@ -74,8 +75,10 @@ export const typeDefs = gql`
   }
 
   type Comment {
-    id: ID!
+    _id: ID!
     content: String!
+    authorId: ID!
+    postId: ID!
     createdAt: String!
     updatedAt: String!
     
@@ -85,7 +88,9 @@ export const typeDefs = gql`
   }
 
   type Like {
-    id: ID!
+    _id: ID!
+    userId: ID!
+    postId: ID!
     createdAt: String!
     
     # Relationships
@@ -123,5 +128,12 @@ export const typeDefs = gql`
   input CreateCommentInput {
     postId: ID!
     content: String!
+  }
+
+  input UpdateUserInput {
+    _id: ID!
+    displayName: String
+    bio: String
+    avatar: String
   }
 `;

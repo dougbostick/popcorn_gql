@@ -6,60 +6,40 @@ import { Like as LikeModel } from '../models/Like';
 import { User, Post, Comment, Like, Context, CreateUserInput, UpdateUserInput, CreatePostInput, UpdatePostInput, CreateCommentInput } from '../types/graphql';
 import mongoose from 'mongoose';
 
-// recently added this trandformDoc function to help match mongoDB responses with gql schema expectiations
-// might want to explore chjanging GQL schema instead
-// Helper function to transform MongoDB documents to match GraphQL schema
-const transformDoc = (doc: any) => {
-  if (!doc) return null;
-  return {
-    ...doc,
-    id: doc._id.toString(),
-    authorId: doc.authorId?.toString(),
-    postId: doc.postId?.toString(),
-    userId: doc.userId?.toString()
-  };
-};
 
 export const resolvers = {
   Query: {
     // User queries
     me: async () => {
       // Return first user as mock current user
-      const user = await UserModel.findOne().lean();
-      return transformDoc(user);
+      return await UserModel.findOne().lean();
     },
-    user: async (parent: unknown, args: { id: string }) => {
-      const user = await UserModel.findById(args.id).lean();
-      return transformDoc(user);
+    user: async (parent: unknown, args: { _id: string }) => {
+      return await UserModel.findById(args._id).lean();
     },
     users: async () => {
-      const users = await UserModel.find().lean();
-      return users.map(transformDoc);
+      return await UserModel.find().lean();
     },
 
     // Post queries
-    post: async (parent: unknown, args: { id: string }) => {
-      const post = await PostModel.findById(args.id).lean();
-      return transformDoc(post);
+    post: async (parent: unknown, args: { _id: string }) => {
+      return await PostModel.findById(args._id).lean();
     },
     posts: async () => {
-      const posts = await PostModel.find().sort({ createdAt: -1 }).lean();
-      return posts.map(transformDoc);
+      return await PostModel.find().sort({ createdAt: -1 }).lean();
     },
     userPosts: async (parent: unknown, args: { userId: string }) => {
-      const posts = await PostModel.find({ authorId: args.userId }).sort({ createdAt: -1 }).lean();
-      return posts.map(transformDoc);
+      return await PostModel.find({ authorId: args.userId }).sort({ createdAt: -1 }).lean();
     },
 
     // Feed query with pagination
     feed: async (parent: unknown, args: { limit?: number; offset?: number }) => {
       const { limit = 10, offset = 0 } = args;
-      const posts = await PostModel.find()
+      return await PostModel.find()
         .sort({ createdAt: -1 })
         .skip(offset)
         .limit(limit)
         .lean();
-      return posts.map(transformDoc);
     }
   },
 
