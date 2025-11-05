@@ -18,15 +18,19 @@ export const typeDefs = gql`
   }
 
   type Mutation {
+    # Authentication mutations
+    login(email: String!, password: String!): AuthPayload!
+    register(input: RegisterInput!): AuthPayload!
+
     # User mutations
     createUser(input: CreateUserInput!): User!
     updateUser(input: UpdateUserInput!): User!
-    
+
     # Post mutations
     createPost(input: CreatePostInput!): Post!
     updatePost(_id: ID!, input: UpdatePostInput!): Post!
     deletePost(_id: ID!): Boolean!
-    
+
     # Interaction mutations
     likePost(postId: ID!): Like!
     unlikePost(postId: ID!): Boolean!
@@ -151,5 +155,19 @@ export const typeDefs = gql`
     displayName: String
     bio: String
     avatar: String
+  }
+
+  input RegisterInput {
+    username: String!
+    email: String!
+    password: String!
+    displayName: String!
+    bio: String
+    avatar: String
+  }
+
+  type AuthPayload {
+    token: String!
+    user: User!
   }
 `;

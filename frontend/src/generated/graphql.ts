@@ -17,6 +17,12 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type AuthPayload = {
+  __typename?: 'AuthPayload';
+  token: Scalars['String']['output'];
+  user: User;
+};
+
 export type Comment = {
   __typename?: 'Comment';
   _id: Scalars['ID']['output'];
@@ -48,6 +54,16 @@ export type CreateUserInput = {
   username: Scalars['String']['input'];
 };
 
+export type Follow = {
+  __typename?: 'Follow';
+  _id: Scalars['ID']['output'];
+  createdAt: Scalars['String']['output'];
+  follower: User;
+  followerId: Scalars['ID']['output'];
+  following: User;
+  followingId: Scalars['ID']['output'];
+};
+
 export type Like = {
   __typename?: 'Like';
   _id: Scalars['ID']['output'];
@@ -65,7 +81,11 @@ export type Mutation = {
   createUser: User;
   deleteComment: Scalars['Boolean']['output'];
   deletePost: Scalars['Boolean']['output'];
+  followUser: Follow;
   likePost: Like;
+  login: AuthPayload;
+  register: AuthPayload;
+  unfollowUser: Scalars['Boolean']['output'];
   unlikePost: Scalars['Boolean']['output'];
   updatePost: Post;
   updateUser: User;
@@ -97,8 +117,29 @@ export type MutationDeletePostArgs = {
 };
 
 
+export type MutationFollowUserArgs = {
+  userId: Scalars['ID']['input'];
+};
+
+
 export type MutationLikePostArgs = {
   postId: Scalars['ID']['input'];
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+
+export type MutationRegisterArgs = {
+  input: RegisterInput;
+};
+
+
+export type MutationUnfollowUserArgs = {
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -137,6 +178,7 @@ export type Post = {
 export type Query = {
   __typename?: 'Query';
   feed: Array<Post>;
+  friendsFeed: Array<Post>;
   me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: Array<Post>;
@@ -152,6 +194,13 @@ export type QueryFeedArgs = {
 };
 
 
+export type QueryFriendsFeedArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  userId: Scalars['ID']['input'];
+};
+
+
 export type QueryPostArgs = {
   _id: Scalars['ID']['input'];
 };
@@ -164,6 +213,15 @@ export type QueryUserArgs = {
 
 export type QueryUserPostsArgs = {
   userId: Scalars['ID']['input'];
+};
+
+export type RegisterInput = {
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  bio?: InputMaybe<Scalars['String']['input']>;
+  displayName: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type UpdatePostInput = {
@@ -304,6 +362,30 @@ export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetMeQuery = { __typename?: 'Query', me?: { __typename?: 'User', _id: string, username: string, displayName: string, bio?: string | null, avatar?: string | null, createdAt: string, postCount: number, followerCount: number, followingCount: number } | null };
+
+export type GetFriendsFeedQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetFriendsFeedQuery = { __typename?: 'Query', friendsFeed: Array<{ __typename?: 'Post', _id: string, title: string, content: string, imageUrl?: string | null, authorId: string, createdAt: string, updatedAt: string, likeCount: number, commentCount: number, isLikedByMe: boolean, author: { __typename?: 'User', _id: string, username: string, displayName: string, avatar?: string | null }, comments: Array<{ __typename?: 'Comment', _id: string, content: string, authorId: string, createdAt: string, author: { __typename?: 'User', _id: string, username: string, displayName: string, avatar?: string | null } }>, likes: Array<{ __typename?: 'Like', _id: string, userId: string, createdAt: string }> }> };
+
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', _id: string, username: string, email: string, displayName: string, bio?: string | null, avatar?: string | null } } };
+
+export type RegisterMutationVariables = Exact<{
+  input: RegisterInput;
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', _id: string, username: string, email: string, displayName: string, bio?: string | null, avatar?: string | null } } };
 
 
 export const CreatePostDocument = gql`
@@ -1050,3 +1132,160 @@ export type GetMeQueryHookResult = ReturnType<typeof useGetMeQuery>;
 export type GetMeLazyQueryHookResult = ReturnType<typeof useGetMeLazyQuery>;
 export type GetMeSuspenseQueryHookResult = ReturnType<typeof useGetMeSuspenseQuery>;
 export type GetMeQueryResult = Apollo.QueryResult<GetMeQuery, GetMeQueryVariables>;
+export const GetFriendsFeedDocument = gql`
+    query GetFriendsFeed($userId: ID!, $limit: Int = 10, $offset: Int = 0) {
+  friendsFeed(userId: $userId, limit: $limit, offset: $offset) {
+    _id
+    title
+    content
+    imageUrl
+    authorId
+    createdAt
+    updatedAt
+    author {
+      _id
+      username
+      displayName
+      avatar
+    }
+    comments {
+      _id
+      content
+      authorId
+      createdAt
+      author {
+        _id
+        username
+        displayName
+        avatar
+      }
+    }
+    likes {
+      _id
+      userId
+      createdAt
+    }
+    likeCount
+    commentCount
+    isLikedByMe
+  }
+}
+    `;
+
+/**
+ * __useGetFriendsFeedQuery__
+ *
+ * To run a query within a React component, call `useGetFriendsFeedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFriendsFeedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFriendsFeedQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetFriendsFeedQuery(baseOptions: Apollo.QueryHookOptions<GetFriendsFeedQuery, GetFriendsFeedQueryVariables> & ({ variables: GetFriendsFeedQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFriendsFeedQuery, GetFriendsFeedQueryVariables>(GetFriendsFeedDocument, options);
+      }
+export function useGetFriendsFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFriendsFeedQuery, GetFriendsFeedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFriendsFeedQuery, GetFriendsFeedQueryVariables>(GetFriendsFeedDocument, options);
+        }
+export function useGetFriendsFeedSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetFriendsFeedQuery, GetFriendsFeedQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetFriendsFeedQuery, GetFriendsFeedQueryVariables>(GetFriendsFeedDocument, options);
+        }
+export type GetFriendsFeedQueryHookResult = ReturnType<typeof useGetFriendsFeedQuery>;
+export type GetFriendsFeedLazyQueryHookResult = ReturnType<typeof useGetFriendsFeedLazyQuery>;
+export type GetFriendsFeedSuspenseQueryHookResult = ReturnType<typeof useGetFriendsFeedSuspenseQuery>;
+export type GetFriendsFeedQueryResult = Apollo.QueryResult<GetFriendsFeedQuery, GetFriendsFeedQueryVariables>;
+export const LoginDocument = gql`
+    mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    token
+    user {
+      _id
+      username
+      email
+      displayName
+      bio
+      avatar
+    }
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const RegisterDocument = gql`
+    mutation Register($input: RegisterInput!) {
+  register(input: $input) {
+    token
+    user {
+      _id
+      username
+      email
+      displayName
+      bio
+      avatar
+    }
+  }
+}
+    `;
+export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
+
+/**
+ * __useRegisterMutation__
+ *
+ * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerMutation, { data, loading, error }] = useRegisterMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
+      }
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;

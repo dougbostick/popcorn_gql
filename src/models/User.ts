@@ -1,8 +1,9 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IUser extends Document {
+export interface UserInterface extends Document {
   username: string;
   email: string;
+  password: string;
   displayName: string;
   bio?: string | null;
   avatar?: string | null;
@@ -22,12 +23,17 @@ const UserSchema: Schema = new Schema({
     minlength: 3,
     maxlength: 30
   },
-  email: { 
-    type: String, 
-    required: true, 
+  email: {
+    type: String,
+    required: true,
     unique: true,
     lowercase: true,
     trim: true
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 6
   },
   displayName: { 
     type: String, 
@@ -62,4 +68,4 @@ const UserSchema: Schema = new Schema({
 UserSchema.index({ username: 1 });
 UserSchema.index({ email: 1 });
 
-export const User = mongoose.model<IUser>('User', UserSchema);
+export const User = mongoose.model<UserInterface>('User', UserSchema);

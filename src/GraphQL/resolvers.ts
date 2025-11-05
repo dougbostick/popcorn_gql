@@ -7,6 +7,8 @@ import { Follow as FollowModel } from '../models/Follow';
 import { User, Post, Comment, Like, Context, CreateUserInput, UpdateUserInput, CreatePostInput, UpdatePostInput, CreateCommentInput } from '../types/graphql';
 import { AuthContext, requireAuth } from '../middleware/auth';
 import { createAutoFriendships } from '../utils/autoFriend';
+import { generateToken } from '../utils/jwt';
+import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 
 
@@ -65,6 +67,70 @@ export const resolvers = {
   },
 
   Mutation: {
+    // Authentication mutations
+    login: async (_parent: unknown, args: { email: string; password: string }) => {
+      const { email, password } = args;
+
+      // Find user by email
+      const user = await UserModel.findOne({ email }).lean();
+      if (!user) {
+        throw new Error('Invalid email or password');
+      }
+
+      // Check password
+      const validPassword = await bcrypt.compare(password, user.password);
+      if (!validPassword) {
+        throw new Error('Invalid email or password');
+      }
+
+      // Generate JWT token
+      const token = generateToken(user._id.toString(), user.email);
+
+      return {
+        token,
+        user
+      };
+    },
+
+    register: async (_parent: unknown, args: { input: any }) => {
+      const { input } = args;
+
+      // Check if user already exists
+      const existingUser = await UserModel.findOne({
+        $or: [{ email: input.email }, { username: input.username }]
+      });
+
+      if (existingUser) {
+        throw new Error('User with this email or username already exists');
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(input.password, 12);
+
+      // Create new user
+      const newUser = new UserModel({
+        username: input.username,
+        email: input.email,
+        password: hashedPassword,
+        displayName: input.displayName,
+        bio: input.bio || null,
+        avatar: input.avatar || null
+      });
+
+      const savedUser = await newUser.save();
+
+      // Create automatic friendships for resume project
+      await createAutoFriendships((savedUser._id as mongoose.Types.ObjectId).toString());
+
+      // Generate JWT token
+      const token = generateToken((savedUser._id as mongoose.Types.ObjectId).toString(), savedUser.email);
+
+      return {
+        token,
+        user: savedUser
+      };
+    },
+
     // User mutations
     createUser: async (parent: unknown, args: { input: CreateUserInput }) => {
       const newUser = new UserModel({

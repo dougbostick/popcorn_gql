@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IFollow extends Document {
+export interface FollowInterface extends Document {
   followerId: mongoose.Types.ObjectId; // User who follows
   followingId: mongoose.Types.ObjectId; // User being followed
   createdAt: Date;
@@ -28,4 +28,4 @@ FollowSchema.index({ followerId: 1, followingId: 1 }, { unique: true });
 FollowSchema.index({ followerId: 1 }); // Get all users this user follows
 FollowSchema.index({ followingId: 1 }); // Get all followers of this user
 
-export const Follow = mongoose.model<IFollow>('Follow', FollowSchema);
+export const Follow = mongoose.model<FollowInterface>('Follow', FollowSchema);
