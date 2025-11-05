@@ -17,12 +17,16 @@
   "dependencies": {
     "@apollo/server": "^5.0.0",
     "@types/mongoose": "^5.11.96",
+    "bcryptjs": "^3.0.3",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.18.0",
     "mongoose": "^8.17.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20.0.0",
     "ts-node": "^10.9.0",
     "typescript": "^5.8.3"

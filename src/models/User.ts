@@ -8,6 +8,9 @@ export interface IUser extends Document {
   avatar?: string | null;
   createdAt: Date;
   updatedAt: Date;
+  // Following relationships
+  following: mongoose.Types.ObjectId[];
+  followers: mongoose.Types.ObjectId[];
 }
 
 const UserSchema: Schema = new Schema({
@@ -37,10 +40,20 @@ const UserSchema: Schema = new Schema({
     default: null,
     maxlength: 160
   },
-  avatar: { 
-    type: String, 
+  avatar: {
+    type: String,
     default: null
-  }
+  },
+  following: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }],
+  followers: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }]
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt
 });

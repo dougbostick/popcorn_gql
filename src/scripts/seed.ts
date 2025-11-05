@@ -3,6 +3,7 @@ import { User } from '../models/User';
 import { Post } from '../models/Post';
 import { Comment } from '../models/Comment';
 import { Like } from '../models/Like';
+import { Follow } from '../models/Follow';
 
 const seedUsers = [
   {
@@ -107,6 +108,7 @@ const seedComments = [
 async function clearDatabase() {
   console.log('🗑️  Clearing existing data...');
   await Promise.all([
+    Follow.deleteMany({}),
     Like.deleteMany({}),
     Comment.deleteMany({}),
     Post.deleteMany({}),
@@ -177,6 +179,58 @@ async function createLikes(users: any[], posts: any[]) {
   return createdLikes;
 }
 
+async function createFollows(users: any[]) {
+  console.log('👥 Creating follow relationships...');
+  const follows = [];
+
+  // For resume project: Make first user (john) have connections with all other users
+  const johnUser = users[0]; // johndoe
+
+  // John follows everyone else
+  for (let i = 1; i < users.length; i++) {
+    follows.push({
+      followerId: johnUser._id,
+      followingId: users[i]._id
+    });
+  }
+
+  // Everyone else follows John back (creating mutual friendships)
+  for (let i = 1; i < users.length; i++) {
+    follows.push({
+      followerId: users[i]._id,
+      followingId: johnUser._id
+    });
+  }
+
+  // Create some additional cross-connections between other users
+  // Sarah follows Mike and Emily
+  if (users.length >= 4) {
+    follows.push(
+      { followerId: users[1]._id, followingId: users[2]._id }, // Sarah -> Mike
+      { followerId: users[1]._id, followingId: users[3]._id }, // Sarah -> Emily
+      { followerId: users[2]._id, followingId: users[1]._id }, // Mike -> Sarah
+      { followerId: users[3]._id, followingId: users[2]._id }  // Emily -> Mike
+    );
+  }
+
+  const createdFollows = await Follow.insertMany(follows);
+
+  // Update user documents with following/followers arrays
+  for (const follow of createdFollows) {
+    await Promise.all([
+      User.findByIdAndUpdate(follow.followerId, {
+        $addToSet: { following: follow.followingId }
+      }),
+      User.findByIdAndUpdate(follow.followingId, {
+        $addToSet: { followers: follow.followerId }
+      })
+    ]);
+  }
+
+  console.log(`Created ${createdFollows.length} follow relationships`);
+  return createdFollows;
+}
+
 async function seedDatabase() {
   try {
     console.log('🌱 Starting database seeding...');
@@ -188,6 +242,7 @@ async function seedDatabase() {
     const posts = await createPosts(users);
     const comments = await createComments(users, posts);
     const likes = await createLikes(users, posts);
+    const follows = await createFollows(users);
 
     console.log('\n✅ Database seeding completed successfully!');
     console.log(`📊 Summary:`);
@@ -195,6 +250,7 @@ async function seedDatabase() {
     console.log(`   Posts: ${posts.length}`);
     console.log(`   Comments: ${comments.length}`);
     console.log(`   Likes: ${likes.length}`);
+    console.log(`   Follows: ${follows.length}`);
 
   } catch (error) {
     console.error('❌ Error seeding database:', error);

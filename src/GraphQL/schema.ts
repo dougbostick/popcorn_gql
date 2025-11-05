@@ -12,8 +12,9 @@ export const typeDefs = gql`
     posts: [Post!]!
     userPosts(userId: ID!): [Post!]!
     
-    # Feed query (for timeline)
+    # Feed queries (for timeline)
     feed(limit: Int = 10, offset: Int = 0): [Post!]!
+    friendsFeed(userId: ID!, limit: Int = 10, offset: Int = 0): [Post!]!
   }
 
   type Mutation {
@@ -31,6 +32,10 @@ export const typeDefs = gql`
     unlikePost(postId: ID!): Boolean!
     addComment(input: CreateCommentInput!): Comment!
     deleteComment(_id: ID!): Boolean!
+
+    # Follow mutations
+    followUser(userId: ID!): Follow!
+    unfollowUser(userId: ID!): Boolean!
   }
 
   type User {
@@ -92,10 +97,21 @@ export const typeDefs = gql`
     userId: ID!
     postId: ID!
     createdAt: String!
-    
+
     # Relationships
     user: User!
     post: Post!
+  }
+
+  type Follow {
+    _id: ID!
+    followerId: ID!
+    followingId: ID!
+    createdAt: String!
+
+    # Relationships
+    follower: User!
+    following: User!
   }
 
   # Input types

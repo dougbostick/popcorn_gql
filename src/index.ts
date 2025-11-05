@@ -3,6 +3,7 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import { resolvers } from "./GraphQL/resolvers";
 import { typeDefs } from "./GraphQL/schema";
 import { connectDB } from './config/database';
+import { createAuthContext } from './middleware/auth';
 
 const PORT = Number(process.env.PORT) || 4000;
 
@@ -17,6 +18,9 @@ async function startServer() {
 
     const { url } = await startStandaloneServer(server, {
          listen: { port: PORT },
+         context: async ({ req }) => {
+             return await createAuthContext(req);
+         }
     });
 
     console.log(`🚀 Server ready at ${url}`);
