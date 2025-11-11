@@ -77,6 +77,31 @@ export function Layout({ children }: LayoutProps) {
               🏠 Home
             </Link>
             <Link
+              to="/friends"
+              style={{
+                textDecoration: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontSize: '15px',
+                fontWeight: '500',
+                backgroundColor: isActive('/friends') ? '#e7f3ff' : 'transparent',
+                color: isActive('/friends') ? '#4267B2' : '#65676b',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseOver={(e) => {
+                if (!isActive('/friends')) {
+                  e.currentTarget.style.backgroundColor = '#f2f3f5';
+                }
+              }}
+              onMouseOut={(e) => {
+                if (!isActive('/friends')) {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }
+              }}
+            >
+              👥 Friends
+            </Link>
+            <Link
               to="/profile"
               style={{
                 textDecoration: 'none',
@@ -171,8 +196,8 @@ export function Layout({ children }: LayoutProps) {
         padding: '0 20px',
         gap: '20px'
       }}>
-        {/* Left Sidebar */}
-        <Sidebar />
+        {/* Left Sidebar - Show on home and friends pages */}
+        {(location.pathname === '/' || location.pathname === '/friends') && <Sidebar />}
 
         {/* Main Content */}
         <div style={{

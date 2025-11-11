@@ -1,4 +1,9 @@
+import { Link, useLocation } from 'react-router-dom';
+
 export function Sidebar() {
+  const location = useLocation();
+  const isActive = (path: string) => location.pathname === path;
+
   return (
     <div style={{
       width: '15%',
@@ -20,13 +25,14 @@ export function Sidebar() {
           flexDirection: 'column',
           gap: '8px'
         }}>
-          {/* Navigation Button 1 */}
-          <button
+          {/* Home Button */}
+          <Link
+            to="/"
             style={{
               padding: '12px 16px',
               border: 'none',
               borderRadius: '8px',
-              backgroundColor: 'transparent',
+              backgroundColor: isActive('/') ? '#e7f3ff' : 'transparent',
               color: '#050505',
               fontSize: '15px',
               fontWeight: '500',
@@ -35,22 +41,32 @@ export function Sidebar() {
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
-              transition: 'background-color 0.2s'
+              transition: 'background-color 0.2s',
+              textDecoration: 'none'
             }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f0f2f5'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            onMouseOver={(e) => {
+              if (!isActive('/')) {
+                e.currentTarget.style.backgroundColor = '#f0f2f5';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (!isActive('/')) {
+                e.currentTarget.style.backgroundColor = isActive('/') ? '#e7f3ff' : 'transparent';
+              }
+            }}
           >
             <span style={{ fontSize: '20px' }}>🏠</span>
             <span>Home</span>
-          </button>
+          </Link>
 
-          {/* Navigation Button 2 */}
-          <button
+          {/* Friends Button */}
+          <Link
+            to="/friends"
             style={{
               padding: '12px 16px',
               border: 'none',
               borderRadius: '8px',
-              backgroundColor: 'transparent',
+              backgroundColor: isActive('/friends') ? '#e7f3ff' : 'transparent',
               color: '#050505',
               fontSize: '15px',
               fontWeight: '500',
@@ -59,16 +75,25 @@ export function Sidebar() {
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
-              transition: 'background-color 0.2s'
+              transition: 'background-color 0.2s',
+              textDecoration: 'none'
             }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f0f2f5'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            onMouseOver={(e) => {
+              if (!isActive('/friends')) {
+                e.currentTarget.style.backgroundColor = '#f0f2f5';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (!isActive('/friends')) {
+                e.currentTarget.style.backgroundColor = isActive('/friends') ? '#e7f3ff' : 'transparent';
+              }
+            }}
           >
             <span style={{ fontSize: '20px' }}>👥</span>
             <span>Friends</span>
-          </button>
+          </Link>
 
-          {/* Navigation Button 3 */}
+          {/* Settings Button (placeholder) */}
           <button
             style={{
               padding: '12px 16px',

@@ -4,6 +4,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
 import { MainFeed } from './components/MainFeed';
 import { Profile } from './components/Profile';
+import { Friends } from './components/Friends';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Routes>
               <Route path="/" element={<MainFeed />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/friends" element={<Friends />} />
             </Routes>
           </Layout>
         </ProtectedRoute>
