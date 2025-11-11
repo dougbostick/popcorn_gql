@@ -298,7 +298,7 @@ export function Register({ onRegisterSuccess, onSwitchToLogin }: RegisterProps) 
           fontSize: '13px',
           color: '#666'
         }}>
-          <strong>🎉 Resume Project Bonus:</strong> You'll automatically get 8 friends when you sign up!
+          <strong>🎉 New User Bonus:</strong> You'll automatically get 8 friends when you sign up!
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { Follow } from '../models/Follow';
 
 /**
  * Automatically create 8 mutual friendships for a new user
- * This is for the resume project to ensure populated feeds
+ * This is for new users to ensure populated feeds
  */
 export async function createAutoFriendships(newUserId: string): Promise<void> {
   try {

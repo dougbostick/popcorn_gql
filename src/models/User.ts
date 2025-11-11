@@ -64,8 +64,5 @@ const UserSchema: Schema = new Schema({
   timestamps: true // Automatically adds createdAt and updatedAt
 });
 
-// Indexes for performance
-UserSchema.index({ username: 1 });
-UserSchema.index({ email: 1 });
 
 export const User = mongoose.model<UserInterface>('User', UserSchema);

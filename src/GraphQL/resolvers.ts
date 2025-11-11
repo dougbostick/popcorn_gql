@@ -15,12 +15,12 @@ import mongoose from 'mongoose';
 export const resolvers = {
   Query: {
     // User queries
-    me: async () => {
-      // Return first user as mock current user
-      return await UserModel.findOne().lean();
+    me: async (parent: unknown, args: unknown, context: AuthContext) => {
+      const { userId } = requireAuth(context);
+      return await UserModel.findById(userId).lean();
     },
-    user: async (parent: unknown, args: { _id: string }) => {
-      return await UserModel.findById(args._id).lean();
+    user: async (parent: unknown, {_id}: { _id: string }) => {
+      return await UserModel.findById(_id).lean();
     },
     users: async () => {
       return await UserModel.find().lean();
@@ -119,7 +119,7 @@ export const resolvers = {
 
       const savedUser = await newUser.save();
 
-      // Create automatic friendships for resume project
+      // Create automatic friendships for new users
       await createAutoFriendships((savedUser._id as mongoose.Types.ObjectId).toString());
 
       // Generate JWT token
@@ -143,7 +143,7 @@ export const resolvers = {
 
       const savedUser = await newUser.save();
 
-      // Create automatic friendships for resume project
+      // Create automatic friendships for new users
       await createAutoFriendships((savedUser._id as any).toString());
 
       return savedUser;

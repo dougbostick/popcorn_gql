@@ -361,7 +361,7 @@ export type GetUserPostsQuery = { __typename?: 'Query', userPosts: Array<{ __typ
 export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMeQuery = { __typename?: 'Query', me?: { __typename?: 'User', _id: string, username: string, displayName: string, bio?: string | null, avatar?: string | null, createdAt: string, postCount: number, followerCount: number, followingCount: number } | null };
+export type GetMeQuery = { __typename?: 'Query', me?: { __typename?: 'User', _id: string, username: string, email: string, displayName: string, bio?: string | null, avatar?: string | null, createdAt: string, postCount: number, followerCount: number, followingCount: number, posts: Array<{ __typename?: 'Post', _id: string, title: string, content: string, imageUrl?: string | null, createdAt: string, likeCount: number, commentCount: number, isLikedByMe: boolean }> } | null };
 
 export type GetFriendsFeedQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -1090,6 +1090,7 @@ export const GetMeDocument = gql`
   me {
     _id
     username
+    email
     displayName
     bio
     avatar
@@ -1097,6 +1098,16 @@ export const GetMeDocument = gql`
     postCount
     followerCount
     followingCount
+    posts {
+      _id
+      title
+      content
+      imageUrl
+      createdAt
+      likeCount
+      commentCount
+      isLikedByMe
+    }
   }
 }
     `;

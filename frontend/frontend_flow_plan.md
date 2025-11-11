@@ -226,15 +226,15 @@ mutation FollowUser($userId: ID!) {
 - Error boundaries
 - Offline handling
 
-## Resume Project Strategy: Auto-Friending System
+## Project Strategy: Auto-Friending System
 
 ### Current Database Analysis
 - **No friend/following system exists** in the current database
 - **5 seed users** already exist: johndoe, sarahsmith, mikejohnson, emilydavis, alexwilson
 - **Mock follower/following counts** in resolvers (random numbers)
 
-### Resume-Friendly Approach
-Since this is a resume project, we want immediate content visibility:
+### new user-Friendly Approach
+Since this is a project for demonstration, we want immediate content visibility:
 
 1. **Auto-Friend System**: When any new user registers, automatically add the 5 existing seed users as friends
 2. **Populated Feed**: Friends feed will always show content from these 8 users (3 seed + new user + 4 others)

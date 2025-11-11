@@ -26,12 +26,12 @@ export const apolloClient = new ApolloClient({
         fields: {
           // Configure cache policies for better performance
           comments: {
-            merge(existing = [], incoming) {
+            merge(_existing = [], incoming) {
               return incoming;
             },
           },
           likes: {
-            merge(existing = [], incoming) {
+            merge(_existing = [], incoming) {
               return incoming;
             },
           },
@@ -40,7 +40,7 @@ export const apolloClient = new ApolloClient({
       User: {
         fields: {
           posts: {
-            merge(existing = [], incoming) {
+            merge(_existing = [], incoming) {
               return incoming;
             },
           },

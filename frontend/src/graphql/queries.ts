@@ -167,6 +167,7 @@ export const GET_ME = gql`
     me {
       _id
       username
+      email
       displayName
       bio
       avatar
@@ -174,6 +175,16 @@ export const GET_ME = gql`
       postCount
       followerCount
       followingCount
+      posts {
+        _id
+        title
+        content
+        imageUrl
+        createdAt
+        likeCount
+        commentCount
+        isLikedByMe
+      }
     }
   }
 `;

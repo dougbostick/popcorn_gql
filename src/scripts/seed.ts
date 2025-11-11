@@ -183,7 +183,7 @@ async function createFollows(users: any[]) {
   console.log('👥 Creating follow relationships...');
   const follows = [];
 
-  // For resume project: Make first user (john) have connections with all other users
+  // For demonstration: Make first user (john) have connections with all other users
   const johnUser = users[0]; // johndoe
 
   // John follows everyone else

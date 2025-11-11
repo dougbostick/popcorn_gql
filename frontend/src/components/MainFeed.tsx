@@ -1,11 +1,23 @@
 import { useState } from 'react';
-import { useGetPostsQuery } from '../generated/graphql';
-import { useAuth } from '../contexts/AuthContext';
+import { useGetPostsQuery, useLikePostMutation, useUnlikePostMutation, useAddCommentMutation } from '../generated/graphql';
+import { CreatePost } from './CreatePost';
 
 export function MainFeed() {
-  const { user, logout } = useAuth();
   const { loading, error, data } = useGetPostsQuery();
   const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set());
+  const [commentInputs, setCommentInputs] = useState<Record<string, string>>({});
+
+  const [likePost] = useLikePostMutation({
+    refetchQueries: ['GetPosts'],
+  });
+
+  const [unlikePost] = useUnlikePostMutation({
+    refetchQueries: ['GetPosts'],
+  });
+
+  const [addComment] = useAddCommentMutation({
+    refetchQueries: ['GetPosts'],
+  });
 
   const toggleComments = (postId: string) => {
     const newExpanded = new Set(expandedComments);
@@ -15,6 +27,37 @@ export function MainFeed() {
       newExpanded.add(postId);
     }
     setExpandedComments(newExpanded);
+  };
+
+  const handleLike = async (postId: string, isLiked: boolean) => {
+    try {
+      if (isLiked) {
+        await unlikePost({ variables: { postId } });
+      } else {
+        await likePost({ variables: { postId } });
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
+  };
+
+  const handleAddComment = async (postId: string) => {
+    const content = commentInputs[postId]?.trim();
+    if (!content) return;
+
+    try {
+      await addComment({
+        variables: {
+          input: {
+            postId,
+            content
+          }
+        }
+      });
+      setCommentInputs(prev => ({ ...prev, [postId]: '' }));
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
   };
 
   if (loading) return (
@@ -41,96 +84,15 @@ export function MainFeed() {
   return (
     <div style={{
       maxWidth: '600px',
-      margin: '0 auto',
-      fontFamily: 'Arial, sans-serif',
-      minHeight: '100vh',
-      backgroundColor: '#f5f5f5'
+      margin: '20px auto',
+      padding: '0 20px',
+      fontFamily: 'Arial, sans-serif'
     }}>
-      {/* Header */}
-      <div style={{
-        backgroundColor: 'white',
-        padding: '15px 20px',
-        borderBottom: '1px solid #ddd',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <h1 style={{
-          margin: 0,
-          color: '#4267B2',
-          fontSize: '24px',
-          fontWeight: 'bold'
-        }}>
-          Social Feed
-        </h1>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            color: '#333'
-          }}>
-            <div style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              backgroundColor: '#4267B2',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '14px'
-            }}>
-              {user?.displayName[0] || '?'}
-            </div>
-            <span style={{ fontWeight: 'bold' }}>{user?.displayName}</span>
-          </div>
-
-          <button
-            onClick={logout}
-            style={{
-              background: 'none',
-              border: '1px solid #ddd',
-              padding: '8px 16px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              color: '#666',
-              fontSize: '14px'
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-
-      {/* Welcome Message */}
-      <div style={{
-        backgroundColor: 'white',
-        margin: '20px 20px 0',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        border: '1px solid #e8f4fd',
-        backgroundColor: '#f8fbff'
-      }}>
-        <h2 style={{ margin: '0 0 10px 0', color: '#4267B2' }}>
-          Welcome back, {user?.displayName}! 👋
-        </h2>
-        <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>
-          {data?.posts?.length ?
-            `You have ${data.posts.length} posts in your feed` :
-            'No posts yet - check back later!'
-          }
-        </p>
-      </div>
+      {/* Create Post */}
+      <CreatePost />
 
       {/* Posts Feed */}
-      <div style={{ padding: '20px' }}>
+      <div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {data?.posts?.map((post) => (
             <div key={post._id} style={{
@@ -184,29 +146,60 @@ export function MainFeed() {
                 />
               )}
 
-              {/* Post Stats */}
+              {/* Post Actions */}
               <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
-                borderTop: '1px solid #eee',
-                paddingTop: '10px',
-                fontSize: '14px',
-                color: '#666'
+                gap: '8px',
+                borderTop: '1px solid #e4e6eb',
+                borderBottom: '1px solid #e4e6eb',
+                padding: '4px 0',
+                marginTop: '12px'
               }}>
-                <span>❤️ {post.likeCount} likes</span>
+                <button
+                  onClick={() => handleLike(post._id, post.isLikedByMe)}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    border: 'none',
+                    borderRadius: '6px',
+                    backgroundColor: 'transparent',
+                    color: post.isLikedByMe ? '#4267B2' : '#65676b',
+                    fontSize: '15px',
+                    fontWeight: post.isLikedByMe ? '600' : '500',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f0f2f5'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  {post.isLikedByMe ? '❤️' : '🤍'} Like ({post.likeCount})
+                </button>
                 <button
                   onClick={() => toggleComments(post._id)}
                   style={{
-                    background: 'none',
+                    flex: 1,
+                    padding: '8px 12px',
                     border: 'none',
+                    borderRadius: '6px',
+                    backgroundColor: 'transparent',
+                    color: '#65676b',
+                    fontSize: '15px',
+                    fontWeight: '500',
                     cursor: 'pointer',
-                    color: '#666',
-                    fontSize: '14px',
-                    padding: '0',
-                    textDecoration: 'none'
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    transition: 'background-color 0.2s'
                   }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f0f2f5'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                 >
-                  💬 {post.commentCount} comments {expandedComments.has(post._id) ? '▲' : '▼'}
+                  💬 Comment ({post.commentCount})
                 </button>
               </div>
 
@@ -280,6 +273,59 @@ export function MainFeed() {
                       No comments yet. Be the first to comment!
                     </div>
                   )}
+
+                  {/* Add Comment Form */}
+                  <div style={{
+                    marginTop: '16px',
+                    paddingTop: '16px',
+                    borderTop: '1px solid #e4e6eb'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      gap: '8px'
+                    }}>
+                      <input
+                        type="text"
+                        placeholder="Write a comment..."
+                        value={commentInputs[post._id] || ''}
+                        onChange={(e) => setCommentInputs(prev => ({ ...prev, [post._id]: e.target.value }))}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleAddComment(post._id);
+                          }
+                        }}
+                        style={{
+                          flex: 1,
+                          padding: '10px 12px',
+                          fontSize: '14px',
+                          border: '1px solid #ccc',
+                          borderRadius: '20px',
+                          outline: 'none',
+                          backgroundColor: '#f0f2f5'
+                        }}
+                        onFocus={(e) => e.currentTarget.style.borderColor = '#4267B2'}
+                        onBlur={(e) => e.currentTarget.style.borderColor = '#ccc'}
+                      />
+                      <button
+                        onClick={() => handleAddComment(post._id)}
+                        disabled={!commentInputs[post._id]?.trim()}
+                        style={{
+                          padding: '10px 20px',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          border: 'none',
+                          borderRadius: '20px',
+                          backgroundColor: commentInputs[post._id]?.trim() ? '#4267B2' : '#e4e6eb',
+                          color: commentInputs[post._id]?.trim() ? 'white' : '#bcc0c4',
+                          cursor: commentInputs[post._id]?.trim() ? 'pointer' : 'not-allowed',
+                          transition: 'background-color 0.2s'
+                        }}
+                      >
+                        Post
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
