@@ -5,6 +5,7 @@ import { Layout } from './components/Layout';
 import { MainFeed } from './components/MainFeed';
 import { Profile } from './components/Profile';
 import { Friends } from './components/Friends';
+import { UserProfile } from './components/UserProfile';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
               <Route path="/" element={<MainFeed />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/friends" element={<Friends />} />
+              <Route path="/user/:userId" element={<UserProfile />} />
             </Routes>
           </Layout>
         </ProtectedRoute>
