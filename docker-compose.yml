@@ -12,9 +12,9 @@ services:
     networks:
       - socialmedia-network
 
-  app:
+  gql-server:
     build: .
-    container_name: socialmedia-app
+    container_name: gql-server-sma
     restart: unless-stopped
     ports:
       - "4000:4000"
