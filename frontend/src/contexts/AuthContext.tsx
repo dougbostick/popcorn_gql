@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { apolloClient } from '../lib/apollo';
 
 interface User {
   _id: string;
@@ -12,8 +13,8 @@ interface User {
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  login: (token: string, user: User) => void;
-  logout: () => void;
+  login: (token: string, user: User) => Promise<void>;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
   loading: boolean;
 }
@@ -52,8 +53,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
-  const login = (newToken: string, newUser: User) => {
+  const login = async (newToken: string, newUser: User) => {
     try {
+      // Clear Apollo cache before logging in new user
+      await apolloClient.clearStore();
+
       // Store in localStorage
       localStorage.setItem(TOKEN_KEY, newToken);
       localStorage.setItem(USER_KEY, JSON.stringify(newUser));
@@ -66,8 +70,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     try {
+      // Clear Apollo cache
+      await apolloClient.clearStore();
+
       // Clear localStorage
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(USER_KEY);

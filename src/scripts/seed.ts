@@ -1,3 +1,5 @@
+import 'dotenv/config';
+import bcrypt from 'bcryptjs';
 import { connectDB, disconnectDB } from '../config/database';
 import { User } from '../models/User';
 import { Post } from '../models/Post';
@@ -118,8 +120,17 @@ async function clearDatabase() {
 
 async function createUsers() {
   console.log('👥 Creating users...');
-  const users = await User.insertMany(seedUsers);
-  console.log(`Created ${users.length} users`);
+
+  // Hash a default password for all seed users
+  const defaultPassword = await bcrypt.hash('password123', 12);
+
+  const usersWithPassword = seedUsers.map(user => ({
+    ...user,
+    password: defaultPassword
+  }));
+
+  const users = await User.insertMany(usersWithPassword);
+  console.log(`Created ${users.length} users (password: password123)`);
   return users;
 }
 
