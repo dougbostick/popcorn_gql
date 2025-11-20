@@ -1,9 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 
 export function Sidebar() {
   const location = useLocation();
-  const { user } = useAuth();
   const isActive = (path: string) => location.pathname === path;
 
   return (
@@ -97,12 +95,12 @@ export function Sidebar() {
 
           {/* Profile Button */}
           <Link
-            to={`/profile/${user?._id}`}
+            to="/profile"
             style={{
               padding: '12px 16px',
               border: 'none',
               borderRadius: '8px',
-              backgroundColor: isActive(`/profile/${user?._id}`) ? '#e7f3ff' : 'transparent',
+              backgroundColor: isActive('/profile') ? '#e7f3ff' : 'transparent',
               color: '#050505',
               fontSize: '15px',
               fontWeight: '500',
@@ -115,12 +113,12 @@ export function Sidebar() {
               textDecoration: 'none'
             }}
             onMouseOver={(e) => {
-              if (!isActive(`/profile/${user?._id}`)) {
+              if (!isActive('/profile')) {
                 e.currentTarget.style.backgroundColor = '#f0f2f5';
               }
             }}
             onMouseOut={(e) => {
-              if (!isActive(`/profile/${user?._id}`)) {
+              if (!isActive('/profile')) {
                 e.currentTarget.style.backgroundColor = 'transparent';
               }
             }}
