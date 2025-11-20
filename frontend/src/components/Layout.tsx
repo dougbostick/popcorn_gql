@@ -43,7 +43,7 @@ export function Layout({ children }: LayoutProps) {
             fontSize: '28px',
             fontWeight: 'bold'
           }}>
-            Social
+            Popcorn
           </h1>
 
           {/* Navigation Links */}

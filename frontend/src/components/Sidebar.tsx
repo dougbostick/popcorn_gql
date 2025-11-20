@@ -1,7 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export function Sidebar() {
   const location = useLocation();
+  const { user } = useAuth();
   const isActive = (path: string) => location.pathname === path;
 
   return (
@@ -93,13 +95,14 @@ export function Sidebar() {
             <span>Friends</span>
           </Link>
 
-          {/* Settings Button (placeholder) */}
-          <button
+          {/* Profile Button */}
+          <Link
+            to={`/profile/${user?._id}`}
             style={{
               padding: '12px 16px',
               border: 'none',
               borderRadius: '8px',
-              backgroundColor: 'transparent',
+              backgroundColor: isActive(`/profile/${user?._id}`) ? '#e7f3ff' : 'transparent',
               color: '#050505',
               fontSize: '15px',
               fontWeight: '500',
@@ -108,14 +111,23 @@ export function Sidebar() {
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
-              transition: 'background-color 0.2s'
+              transition: 'background-color 0.2s',
+              textDecoration: 'none'
             }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f0f2f5'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            onMouseOver={(e) => {
+              if (!isActive(`/profile/${user?._id}`)) {
+                e.currentTarget.style.backgroundColor = '#f0f2f5';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (!isActive(`/profile/${user?._id}`)) {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }
+            }}
           >
-            <span style={{ fontSize: '20px' }}>⚙️</span>
-            <span>Settings</span>
-          </button>
+            <span style={{ fontSize: '20px' }}>👤</span>
+            <span>Profile</span>
+          </Link>
 
           {/* Divider */}
           <div style={{
